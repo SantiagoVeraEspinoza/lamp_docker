@@ -9,6 +9,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 dir(COMPOSE_FILE_PATH) {
+                    sh 'ls'
                     sh 'python3 -m pytest tests.py'
                 }
             }
