@@ -21,6 +21,7 @@ pipeline {
                 dir(COMPOSE_FILE_PATH) {
                     // Run docker-compose down to stop the running services
                     sh 'docker-compose down'
+                    sh 'sleep 3'
                 }
             }
         }
