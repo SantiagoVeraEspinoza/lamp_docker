@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     environment {
-        WORKDIR_PATH = './' // Path to your docker-compose.yml file, if not in the root directory
+        TESTS_PATH = './tests' // Path to your docker-compose.yml file, if not in the root directory
     }
 
     stages {
-        stage('Check Deploy Status') {
+        stage('Run Tests') {
             steps {
-                sh 'echo Test'
+                dir(COMPOSE_FILE_PATH) {
+                    sh 'python3 -m pytest tests.py'
+                }
             }
         }
     }

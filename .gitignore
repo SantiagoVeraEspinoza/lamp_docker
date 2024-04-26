@@ -1,2 +1,8 @@
 mysql_data
 nohup.out
+
+tests/__pycache__
+tests/.pytest_cache
+
+html/mysql_data
+
