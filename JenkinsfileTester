@@ -8,18 +8,7 @@ pipeline {
     stages {
         stage('Check Deploy Status') {
             steps {
-                script {
-                    // Reemplaza 'Pipeline A' con el nombre real de tu pipeline
-                    def job = Jenkins.instance.getItemByFullName('LAMP-Deployer')
-                    def lastBuild = job.getLastBuild()
-                    
-                    // Verifica si la última compilación de Pipeline A fue exitosa
-                    if (lastBuild.result == Result.SUCCESS) {
-                        echo 'Deploy job completed successfully'
-                    } else {
-                        error('Deploy job failed')
-                    }
-                }
+                sh 'echo Test'
             }
         }
     }
