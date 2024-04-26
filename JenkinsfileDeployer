@@ -34,11 +34,5 @@ pipeline {
                 }
             }
         }
-
-        stage('Trigger Tests') {
-            steps {
-                build job: "LAMP-Tester", wait: true
-            }
-        }
     }
 }
