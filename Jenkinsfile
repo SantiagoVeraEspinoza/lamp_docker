@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // Checkout the Git repository
                 dir(COMPOSE_FILE_PATH) {
-                    sh 'git reset --hard; git pull' // Specify the branch to checkout
+                    sh 'git checkout main; git reset --hard; git pull' // Specify the branch to checkout
                 }
             }
         }
