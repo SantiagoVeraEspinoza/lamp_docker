@@ -2,14 +2,22 @@ pipeline {
     agent any
 
     environment {
+        MAIN_PATH = './'
         TESTS_PATH = './tests' // Path to your docker-compose.yml file, if not in the root directory
     }
 
     stages {
+        stage('Install Dependencies') {
+            steps {
+                dir(MAIN_PATH) {
+                    sh 'pip install -r requirements.txt'
+                }
+            }
+        }
+
         stage('Run Tests') {
             steps {
                 dir(TESTS_PATH) {
-                    sh 'ls'
                     sh 'python3 -m pytest tests.py'
                 }
             }
