@@ -80,9 +80,9 @@ pipeline {
                     def dockerHubRepo = 'santiagovera'
 
                     // Etiquetar las imágenes locales con el repositorio de Docker Hub
-                    sh "docker tag apache-image:latest ${dockerHubRepo}/lamp-apache-image:latest"
-                    sh "docker tag phpmyadmin-image:latest ${dockerHubRepo}/lamp-myadmin-image:latest"
-                    sh "docker tag mysql-image:latest ${dockerHubRepo}/lamp-mysql-image:latest"
+                    sh "docker tag lamp-apache-image:latest ${dockerHubRepo}/lamp-apache-image:latest"
+                    sh "docker tag lamp-myadmin-image:latest ${dockerHubRepo}/lamp-myadmin-image:latest"
+                    sh "docker tag lamp-mysql-image:latest ${dockerHubRepo}/lamp-mysql-image:latest"
 
                     // Subir las imágenes a Docker Hub
                     sh "docker push ${dockerHubRepo}/lamp-apache-image:latest"
