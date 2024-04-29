@@ -91,5 +91,23 @@ pipeline {
                 }
             }
         }
+
+        stage('Delete Local Images') {
+            steps {
+                script {
+                    def dockerHubRepo = 'santiagovera'
+
+                    // Eliminar imágenes locales
+                    sh "docker image rm lamp-apache-image:latest"
+                    sh "docker image rm lamp-myadmin-image:latest"
+                    sh "docker image rm lamp-mysql-image:latest"
+
+                    // Eliminar imágenes locales con el repositorio Docker Hub
+                    sh "docker image rm ${dockerHubRepo}/lamp-apache-image:latest"
+                    sh "docker image rm ${dockerHubRepo}/lamp-myadmin-image:latest"
+                    sh "docker image rm ${dockerHubRepo}/lamp-mysql-image:latest"
+                }
+            }
+        }
     }
 }
