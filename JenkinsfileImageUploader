@@ -55,11 +55,14 @@ pipeline {
                     // Crear una imagen de Docker a partir del contenedor MySQL
                     sh "docker commit ${env.MYSQL_CONTAINER_ID} lamp-mysql-image:latest"
                     echo "Created Docker image 'lamp-mysql-image:latest' from container ID ${env.MYSQL_CONTAINER_ID}"
+
+                    sh 'docker image prune -f'
+                    echo "Deleted all unused Docker images"
                 }
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Login to DockerHub') {
             steps {
                 script {
                     // Usa withCredentials para obtener las credenciales de Jenkins
@@ -67,6 +70,24 @@ pipeline {
                         // Utiliza las credenciales para iniciar sesión en Docker Hub
                         sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                     }
+                }
+            }
+        }
+
+        stage('Upload Images to DockerHub') {
+            steps {
+                script {
+                    def dockerHubRepo = 'santiagovera'
+
+                    // Etiquetar las imágenes locales con el repositorio de Docker Hub
+                    sh "docker tag apache-image:latest ${dockerHubRepo}/lamp-apache-image:latest"
+                    sh "docker tag phpmyadmin-image:latest ${dockerHubRepo}/lamp-myadmin-image:latest"
+                    sh "docker tag mysql-image:latest ${dockerHubRepo}/lamp-mysql-image:latest"
+
+                    // Subir las imágenes a Docker Hub
+                    sh "docker push ${dockerHubRepo}/lamp-apache-image:latest"
+                    sh "docker push ${dockerHubRepo}/lamp-myadmin-image:latest"
+                    sh "docker push ${dockerHubRepo}/lamp-mysql-image:latest"
                 }
             }
         }
