@@ -58,5 +58,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    // Usa withCredentials para obtener las credenciales de Jenkins
+                    withCredentials([usernamePassword(credentialsId: '9a911e1f-e132-4d13-89ea-4388b1d705e4', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // Utiliza las credenciales para iniciar sesión en Docker Hub
+                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                    }
+                }
+            }
+        }
     }
 }
