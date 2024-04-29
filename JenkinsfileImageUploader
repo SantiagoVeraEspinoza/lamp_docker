@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    environment {
+        MAIN_PATH = './'
+    }
+
+    stages {
+        stage('Get Containers') {
+            steps {
+                def runningApacheContainerID = sh(
+                    script: 'docker ps --filter "status=running" --filter "ancestor=php:8.2-apache" --format "{{.ID}}"',
+                    returnStdout: true
+                ).trim()
+
+                def runningMyAdminContainerID = sh(
+                    script: 'docker ps --filter "status=running" --filter "ancestor=phpmyadmin/phpmyadmin" --format "{{.ID}}"',
+                    returnStdout: true
+                ).trim()
+
+                def runningMySQLContainerID = sh(
+                    script: 'docker ps --filter "status=running" --filter "ancestor=mysql:8.1.0" --format "{{.ID}}"',
+                    returnStdout: true
+                ).trim()
+
+                // Verifica si se encontró algún contenedor con la imagen específica
+                if (runningApacheContainerID && runningMyAdminContainerID && runningMySQLContainerID) {
+                    echo "Running container ID for Apache: ${runningApacheContainerID}"
+                    echo "Running container ID for PHP MyAdmin: ${runningMyAdminContainerID}"
+                    echo "Running container ID for MySQL: ${runningMySQLContainerID}"
+                    
+                    // Guarda el ID del contenedor en una variable de entorno para su uso posterior
+                    env.APACHE_CONTAINER_ID = runningApacheContainerID
+                    env.MYADMIN_CONTAINER_ID = runningMyAdminContainerID
+                    env.MYSQL_CONTAINER_ID = runningMySQLContainerID
+                } else {
+                    error("No running container found for any of the Images")
+                }
+            }
+        }
+
+        stage('Build Images') {
+            steps {
+                dir(MAIN_PATH) {
+                    sh 'python3 -m pytest tests.py'
+                }
+            }
+        }
+    }
+}
