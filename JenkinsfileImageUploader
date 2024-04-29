@@ -43,8 +43,18 @@ pipeline {
 
         stage('Build Images') {
             steps {
-                dir(MAIN_PATH) {
-                    sh 'python3 -m pytest tests.py'
+                script {
+                    // Crear una imagen de Docker a partir del contenedor Apache
+                    sh "docker commit -t lamp-apache-image:latest ${env.APACHE_CONTAINER_ID}"
+                    echo "Created Docker image 'lamp-apache-image:latest' from container ID ${env.APACHE_CONTAINER_ID}"
+
+                    // Crear una imagen de Docker a partir del contenedor phpMyAdmin
+                    sh "docker commit -t lamp-myadmin-image:latest ${env.MYADMIN_CONTAINER_ID}"
+                    echo "Created Docker image 'lamp-myadmin-image:latest' from container ID ${env.MYADMIN_CONTAINER_ID}"
+
+                    // Crear una imagen de Docker a partir del contenedor MySQL
+                    sh "docker commit -t lamp-mysql-image:latest ${env.MYSQL_CONTAINER_ID}"
+                    echo "Created Docker image 'lamp-mysql-image:latest' from container ID ${env.MYSQL_CONTAINER_ID}"
                 }
             }
         }
